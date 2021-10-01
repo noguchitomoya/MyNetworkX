@@ -2,18 +2,16 @@ import numpy as np
 
 
 class RGB:
-    def __init__(self, npy_file_name):
-        self.npy_file_name = npy_file_name
-        self.joint_feature = None
+    def __init__(self, feature_array):
+
+        self.joint_feature = feature_array
         self.red = None
         self.green = None
         self.blue = None
         self.color_code = None
         self.color_element_0_to_1 = None
 
-    def get_joint_feature(self):
-        feature = np.load(self.npy_file_name)
-        self.joint_feature = feature
+
 
     def get_rgb(self):
         red_list = list()
@@ -43,8 +41,8 @@ class RGB:
         self.color_code = color_code_list
 
 
-rgb = RGB("joint_feature[31].npy")
-rgb.get_joint_feature()
+feature =  np.load("joint_feature[31].npy")
+rgb = RGB(feature)
 rgb.get_rgb()
 rgb.get_color_code()
 for i in range(25):
