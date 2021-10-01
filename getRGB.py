@@ -10,6 +10,7 @@ class RGB:
         self.blue = None
         self.color_code = None
         self.color_element_0_to_1 = None
+        self.get_rgb()
 
 
 
@@ -41,9 +42,9 @@ class RGB:
         self.color_code = color_code_list
 
 
-feature =  np.load("joint_feature[31].npy")
-rgb = RGB(feature)
-rgb.get_rgb()
-rgb.get_color_code()
-for i in range(25):
-    print(str(i) + "   " + str(rgb.color_code[i]))
+# feature =  np.load("joint_feature[31].npy")
+# rgb = RGB(feature)
+# rgb.get_rgb()
+# rgb.get_color_code()
+# for i in range(25):
+#     print(str(i) + "   " + str(rgb.color_code[i]))

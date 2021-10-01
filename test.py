@@ -33,29 +33,20 @@ node21 = "21"
 node22 = "22"
 node23 = "23"
 node24 = "24"
-feature =  np.load("joint_feature[31].npy")
+feature = np.load("joint_feature[31].npy")
 rgb = RGB(feature)
 rgb.get_rgb()
 node_list = [node0, node1, node2, node3, node4, node5, node6, node7, node8, node9, node10, node11,
              node12, node13, node14,
-             node15, node16, node17, node18, node19, node20, node21, node22, node23, node24 ]
-
+             node15, node16, node17, node18, node19, node20, node21, node22, node23, node24]
 
 for i in node_list:
-     G.add_nodes_from([(i,{"color":rgb.color_element_0_to_1[node_list.index(i)]})])
+    G.add_nodes_from([(i, {"color": rgb.color_element_0_to_1[node_list.index(i)]})])
 # G.add_nodes_from(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18","19", "20","21", "22", "23", "24"])
 # G.add_nodes_from(
 #     [(node0, {"color": "darkorange"}), (node1,{"color":[1.0, 0.0, 0.0]}), node2, node3, node4, node5, node6, node7, node8, node9, node10, node11,
 #      node12, node13, node14,
 #      node15, node16, node17, node18, node19, node20, node21, node22, node23, node24])
-
-
-
-
-
-
-
-
 
 
 # edgeデータの追加
@@ -117,6 +108,9 @@ pos = {
 }
 # ネットワークの可視化
 node_color = [node["color"] for node in G.nodes.values()]
-nx.draw(G, pos, node_color=node_color, with_labels = True)
+nx.draw(G, pos, node_color=node_color, with_labels=True)
 
 plt.show()
+
+
+
