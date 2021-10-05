@@ -109,9 +109,12 @@ class SkeltonGraph:
 
     def show_skelton(self):
         nx.draw(self.G, self.pos, node_color=self.node_color, with_labels=True)
-        plt.show()
+        # plt.show()
+        plt.savefig('figure.png')
 
 
 feature = np.load("joint_feature[31].npy")
 s = SkeltonGraph(feature)
 s.show_skelton()
+
+
