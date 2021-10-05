@@ -19,12 +19,20 @@ class RGB:
         return ((np.tanh(((x + offset_x) * gain) / 2) + 1) / 2)
 
     def colorBarRGB(self, x):
+        # if x <= 0.485:
+        #     x = x / 0.50
+        # elif x >= 0.515 and x * 1.50 <= 1.0:
+        #     x = x * 1.50
+
         x = (x * 2) - 1
         red = self.sigmoid(x, self.gain, -1 * self.offset_x)
         blue = 1 - self.sigmoid(x, self.gain, self.offset_x)
         green = self.sigmoid(x, self.gain, self.offset_green) + (1 - self.sigmoid(x, self.gain, -1 * self.offset_green))
-        green = green - 1.0
+        green = (green - 1.0)
+
+    # green = (green - 1.0)/2.0
         return (red, green, blue)
+
 
     def get_rgb(self):
         red_list = list()
@@ -33,11 +41,12 @@ class RGB:
         color_0_to_1 = list()
         for i in self.joint_feature:
             tmp = self.colorBarRGB(i)
-            # red = int(176 * i)
-            # blue = int(176 * (1 - i))
             red = int(255 * tmp[0])
             blue = int(255 * tmp[2])
             green = int(255 * tmp[1])
+            # red = int(176 * i)
+            # blue = int(176 * (1 - i))
+
             red_list.append(red)
             blue_list.append(blue)
             green_list.append(green)
@@ -48,6 +57,7 @@ class RGB:
         self.blue = blue_list
         self.green = green_list
         self.color_element_0_to_1 = color_0_to_1
+
 
     def get_color_code(self):
         color_code_list = list()
