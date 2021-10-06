@@ -16,13 +16,18 @@ for i in range(32):
         arr_with_30[index_of_30] = features[i]
         index_of_30 += 1
 
-testgraph = SkeltonGraph(arr_with_30[0])
-testgraph.show_skelton()
+# testgraph = SkeltonGraph(arr_with_30[0])
+# testgraph.show_skelton()
 mean_of_22 = np.mean(arr_with_22, axis=0)
 mean_of_30 = np.mean(arr_with_30, axis=0)
-graph_of_22 = SkeltonGraph(mean_of_22)
-graph_of_22.show_skelton()
-graph_of_30 = SkeltonGraph(mean_of_30)
-graph_of_30.show_skelton()
+# graph_of_22 = SkeltonGraph(mean_of_22)
+# graph_of_22.show_skelton()
+# graph_of_30 = SkeltonGraph(mean_of_30)
+# graph_of_30.show_skelton()
+
+
+
+knee_left_for_22 = arr_with_22[:, 13]
+knee_left_for_30 = arr_with_30[:, 13]
 
 print(2)
