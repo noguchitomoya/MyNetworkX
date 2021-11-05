@@ -2,6 +2,36 @@ import matplotlib.pyplot as plt
 import networkx as nx
 from getRGB import RGB
 import numpy as np
+from PIL import Image, ImageDraw
+import matplotlib.animation as animation
+import cv2
+
+
+def min_max_normalization(x):
+    min = x.min()
+    max = x.max()
+    result = (x - min) / (max - min)
+    return result
+
+
+def save_gif(frame, output_path):
+    images = []
+    for i in range(frame):
+        filename = './DataDir/{:03}.png'.format(i)
+        img = Image.open(filename)
+        images.append(img)
+    images[0].save(output_path+".gif", save_all=True, append_images=images[1:], loop=0, duration=80)
+
+    height, width, layers = cv2.imread('./DataDir/{:03}.png'.format(1)).shape
+    size = (width, height)
+
+    codec = cv2.VideoWriter_fourcc(*'mp4v')
+    video = cv2.VideoWriter(output_path+".mp4", codec, 4.0, size)
+
+    for i in range(frame):
+        img = cv2.imread('./DataDir/{:03}.png'.format(i))
+        video.write(img)
+    video.release()
 
 
 class SkeltonGraph:
@@ -17,7 +47,8 @@ class SkeltonGraph:
         # init node
         node_list = []
         for i in range(25):
-            node_list.append(str(i)+": "+str(self.joint_feature[i])[:4])
+            node_list.append(str(i))  # ノードの文字列が、0~24の番号
+            # node_list.append(str(i)+": "+str(self.joint_feature[i])[:4])#ノードの文字列が、重要度の値（見づらいかも？）
         # node0 = "0.442"
         # node1 = "1"
         # node2 = "2"
@@ -49,8 +80,14 @@ class SkeltonGraph:
         # set color to nodes
         # for i in node_list:
         #     self.G.add_nodes_from([(i, {"color": self.rgb.color_element_0_to_1[node_list.index(i)]})])
-        for i in range(len(node_list)):
-            self.G.add_nodes_from([(node_list[i], {"color": self.rgb.color_element_0_to_1[i]})])
+        cmap = plt.get_cmap('viridis')  # カラーマップの種類（https://tech-market.org/matplotlib-cmap/）
+        for node in range(len(node_list)):
+            col = cmap(self.joint_feature[node])
+            color = list((col[0], col[1], col[2]))
+            # color.reverse()
+            # print(color)
+            self.G.add_nodes_from([(node_list[node], {"color": color})])
+            # self.G.add_nodes_from([(node_list[i], {"color": self.rgb.color_element_0_to_1[i]})])
 
         # init edges
         self.G.add_edges_from([
@@ -158,7 +195,7 @@ class SkeltonGraph:
             node_list[24]: (820, 465)
 
         }
-        nx.draw(self.G, self.pos,with_labels=True)
+        nx.draw(self.G, self.pos, with_labels=True)
         self.node_color = [node["color"] for node in self.G.nodes.values()]
 
     def show_skelton(self):
@@ -166,7 +203,28 @@ class SkeltonGraph:
         plt.show()
         # plt.savefig('figure_30.png')
 
+    def save_skelton(self, i):
+        nx.draw(self.G, self.pos, node_color=self.node_color, with_labels=True)
+        plt.savefig("./DataDir/{:03d}.png".format(i))
 
-feature = np.load("joint_feature[31].npy")
-s = SkeltonGraph(feature)
-s.show_skelton()
+
+
+print("start")
+all_cam=np.load("./DataDir/cam_batch_32.npy")
+frame = 60
+for batch in range(31,32):
+    print("batch is ----------------", batch)
+    cam = all_cam[batch]
+    cam = min_max_normalization(cam)
+
+
+    for i in range(frame):
+        print("batch "+str(batch)+"and frame " +str(i))
+        feature = cam[i]
+        s = SkeltonGraph(feature)
+        s.save_skelton(i)
+        del s
+
+    save_gif(frame, "./DataDir/sample_{:03d}".format(batch))
+
+print("end")
